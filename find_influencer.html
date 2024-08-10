@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="device-width, initial-scale=1">
+        <title>Sponsor | Dashboard</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='home.css') }}">
+    </head>
+    <body>
+        <div class="container">
+            <div class="header-left-col">
+                <img src="{{url_for('static', filename='uploads/'+image) }}" alt="Profile Picture"
+                    class="header-profile-picture">
+                <h2 class="h2">{{name}}</h2><br>
+            </div>
+            <div class="header-right-col">
+                <section class="campaign-block">
+                    <a href="{{url_for('sponsor_profile')}}" class="link-button">Profile</a>
+                    <a href="{{url_for('campaigns')}}" class="link-button">Campaigns</a>
+                    <a href="{{url_for('search_influencers')}}" class="link-button">Search</a>
+                    <a href="" class="link-button">Statistics</a>
+                    <a href="{{url_for('sponsor_logout')}}" class="link-button">logout</a>
+                </section>
+
+            </div>
+        </div>
+        <hr>
+        <div class="container">
+            <div class="left-col">
+                
+                <img src="{{url_for('static', filename='uploads/'+influencer.profile_image) }}" alt="Profile Picture" class="header-profile-picture">
+                <h2>{{influencer.name}}</h2>
+            </div>
+            {%if id == 'view'%}
+            <div class="right-col">
+                <h3>Influencer Name : {{influencer.name}}</h3>
+                <p>
+                    Mobile No : {{influencer.mobileno}}<br>
+                    Category : {{influencer.category}}<br>
+                    Interest : {{influencer.niche}}<br>
+                    Follower : {{influencer.reach}}<br>
+                    {%if influencer.youtube_link and influencer.youtube_link != 'None'%}
+                        Youtube : <a href="{{influencer.youtube_link}}">Link</a><br>
+                    {%endif%}
+                    {%if influencer.facebook_link and influencer.facebook_link != 'None'%}
+                        Facebook : <a href="{{influencer.facebook_link}}">Link</a><br>
+                    {%endif%}
+                    {%if influencer.tweeter_link and influencer.tweeter_link != 'None'%}
+                        Tweeter : <a href="{{influencer.tweeter_link}}">Link</a><br>
+                    {%endif%}
+                    {%if influencer.insta_link and influencer.insta_link != 'None'%}
+                        Instagram : <a href="{{influencer.insta_link}}">Link</a><br>
+                    {%endif%}
+                    {%if influencer.linkedin_link and influencer.linkedin_link != 'None'%}
+                        Linkedin : <a href="{{influencer.linkedin_link}}">Link</a><br>
+                    {%endif%}
+                </p>
+                <div class="inner-block">
+                    <a href="{{url_for('make_request', influencer_id = influencer.influencer_id)}}" class="link-button">Ad Request</a>
+                </div>
+            </div>
+            {%elif id == 'send'%}
+            <div class="right-col">
+                <h3 class="link-button">Private AD request to {{influencer.name}}</h3>
+                <form action="/sponsor_dashboard/adrequest/{{influencer.influencer_id}}" method="POST">
+                    <input type="text" name="id" value="{{influencer.influencer_id}}" required readonly hidden><br>
+                    <label>Messages</label><br>
+                    <textarea name="message" placeholder="messages"  maxlength="100" required></textarea><br>
+                    <label>Requirements</label><br>
+                    <textarea name="requirements" placeholder="requirments for campaign" maxlength="100" required></textarea><br>
+                    <label>Payment_amount</label><br>
+                    <input type="number" name="amount" placeholder="enter payment amount" required>(in Indian Rupee.)<br>
+                    <input type="text" name="type" value="private" required hidden readonly>
+                    <label>Select Campaign</label><br>
+                    <select type="text" name="campaign" required>
+                        {%for camp in campaigns%}
+                        <option value="{{camp.campaign_id}}">{{camp.name}}</option>
+                        {%endfor%}
+                    </select>
+                    
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+            {%elif id == 'success'%}
+            <div class="right-col">
+                <h3 style="color: green;">AD request sent to {{influencer.name}} successfully.</h3><br>
+                <a class="link-button" href="{{url_for('sponsor_dashboard')}}">Back to Dashboard</a>
+            </div>
+            {%endif%}   
+                
+
+        </div>
+    </body>
+
+
+
+</html>

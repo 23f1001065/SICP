@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="device-width, initial-scale=1">
+        <title>Influencer | Dashboard</title>
+        <link rel="stylesheet" href="{{url_for('static',filename='home.css')}}">
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="header-left-col">
+                <img  src="{{url_for('static',filename='uploads/'+image)}}" alt="Profile Picture" class="header-profile-picture">
+                <h2 class="h2">{{name}}</h2>
+            </div>
+            <div class="header-right-col">
+                <section class="campaign-block">
+                    <a href="{{url_for('influencer_profile')}}" class="link-button">Profile</a>
+                    <a href="{{url_for('influencer_search')}}" class="link-button">Search</a>
+                    <a href="{{url_for('influencer_stat')}}" class="link-button">Statistics</a>
+                    <a href="{{url_for('influencer_logout')}}" class="link-button">logout</a>
+                </section>
+            </div>
+        </div>
+        <hr>
+
+        {%if id == 'profile'%}
+        <div class="container">
+            <div class="left-col">
+                <img src="..\static\uploads\{{image}}" alt="Profile Picture" class="body-profile-picture">
+                <p>{{name}}</p>
+                <form action="/influencer_dashboard/profile_pic/upload" method="POST" enctype="multipart/form-data">
+                    <label>Edit Profile Picture</label><br>
+                    <input type="file" name="profile_pic" accept=".png,.jpg,.jpeg,.svg" required><br>
+                    <button type="submit">Update</button>
+                </form>
+            </div>
+            
+            <div class="right-col">
+                <form action="/influencer_dashboard/profile" method="POST">
+                    <label>User_ID</label><br>
+                    <input type="text" name="ID" value="{{influencer.influencer_id}}" required readonly><br>
+                    <label>Name</label><br>
+                    <input type="name" name="name" value="{{influencer.name}}" required><br>
+                    <label>Email</label><br>
+                    <input type="email" name="email" value="{{influencer.email}}" required><br>
+                    <label>Mobile No</label><br>
+                    <input type="text" name="mobno" value="{{influencer.mobileno}}" required maxlength="10" minlength="10"><br>
+                    <label>Password</label><br>
+                    <input type="text" name="password" value="{{influencer.password}}" required><br>
+                    <label>Category</label><br>
+                    <select type="text" name="category" value="{{influencer.category}}" required>
+                        <option value="Experienced">Experienced</option>
+                        <option value="Midlevel">Midlevel</option>
+                        <option value="Biginer">Biginer</option>
+                    </select><br>
+                    <label>Field</label><br>
+                    <input type="text" name="niche" value="{{influencer.niche}}" required><br>
+                    <label>Social Media Follower:</label><br>
+                    <input type="number" name="reach" value="{{influencer.reach}}" required><br>
+                    <label>Youtube</label><br>
+                    <input type="url" name="youtube" value="{{influencer.youtube_link}}"><br>
+                    <label>Facebook</label><br>
+                    <input type="url" name="facebook" value="{{influencer.facebook_link}}"><br>
+                    <label>Tweeter</label><br>
+                    <input type="url" name="tweeter" value="{{influencer.tweeter_link}}"><br>
+                    <label>Insta</label><br>
+                    <input type="url" name="insta" value="{{influencer.insta_link}}"><br>
+                    <label>Linkedin</label><br>
+                    <input type="url" name="linkedin" value="{{influencer.linkedin_link}}"><br>
+                    
+                    <button type="submit">Update</button>
+                    
+                </form>
+            </div>
+        </div>
+        
+        {%elif id == 'search'%}
+        <form action="/influencer_dashboard/search_campaign" method="GET" class="search-box">
+            <input type="search" name="industry" placeholder="Search campaign ...(ex-food,lifestyle,gadget etc)" required>
+            <input type="number" name="budget" placeholder="min-budget" min="0"  required>
+            <button type="submit">search</button>
+        </form>
+            
+        <div class="campaign-block">
+        
+            {%if not empty_q and campaigns|length == 0%}
+            <section style="color: grey;">
+                <h2>Not found any campaigns based on the search query</h2>
+                <p>please provide search query like Ex-<br>
+                    If Campaign is  in Food industry type 'food'<br>
+                    If Campaign is in textile industry type 'textile' etc..
+                </p>
+            </section>
+            {%else%}
+            <h3 class="link-button">All Campaigns</h3>
+            <ol>
+                {% for campaign in campaigns%}
+                <li>
+                    <h3>Campaing ID : {{campaign.campaign_id}}</h3>
+                    <div class="inner-block">
+                        <a class="link-button" href="{{url_for('view_campaign',camp_id=campaign.campaign_id)}}">View</a>
+                    </div>
+                </li>
+                <hr>
+                {% endfor %}
+            </ol>
+            {% endif %}
+        </div>
+                    
+                        
+
+
+        {%elif id =='view' %}
+        <div class="container">
+            <div class="left-col">
+                <h3>Campaign Id : {{campaign.campaign_id}}</h3>
+                    Name : {{campaign.name}}
+            </div>
+                
+            <div class="right-col">
+                <h3 class="link-button">Campaign</h3>
+                <p>
+                    Name : {{campaign.name}}<br>
+                    Start Date : {{campaign.start_date}}<br>
+                    End Date : {{campaign.end_date}}<br>
+                    Budget : {{campaign.budget}}<br>
+                    Goals : {{campaign.goals}}<br>
+                    Description : {{campaign.description}}<br>
+                    Current Status : {{campaign.current_status}}<br>
+                    Create Date : {{campaign.created_date}}<br>
+                </p>
+                <div class="inner-block">
+                    <a href="{{url_for('send_request',campaign_id=campaign.campaign_id)}}" class="link-button">Ad Request</a>
+                </div>
+            </div>
+        </div>
+        
+        {%elif id == 'send'%}
+        <div class="container">
+            <div class="left-col">
+                <h3>Campaign Id : {{campaign.campaign_id}}</h3>
+                Name : {{campaign.name}}
+            </div>
+            <div class="right-col">
+                <h3 class="link-button">Send AD request to campaign {{campaign.campaign_id}}</h3>
+                <form action="/influencer_dashboard/adrequest/{{campaign.campaign_id}}" method="POST">
+                    <label>Messages</label><br>
+                    <textarea name="message" placeholder="messages" maxlength="100" required></textarea><br>
+                    <label>Requirements</label><br>
+                    <textarea name="requirements" placeholder="requirments for campaign" maxlength="100" required></textarea><br>
+                    <label>Payment_amount</label><br>
+                    <input type="number" name="amount" placeholder="enter payment amount" required>(in Indian Rupee.)<br>
+                    <input type="text" name="type" value="private" required hidden readonly>
+                    <button type="submit">Send</button>
+                
+                </form>
+            </div>
+        </div>
+        
+        {%elif id == 'success'%}
+        <div class="container">
+            <div class="left-col">
+                <h3>Campaign Id : {{campaign.campaign_id}}</h3>
+            </div>
+            <div class="right-col">
+                <h3 style="color: green;">AD request sent to campaign {{campaign.name}} successfully.</h3>
+                <a href="{{url_for('influencer_dashboard')}}" class="link-button">Back to dashboard</a>
+            </div>
+        </div>
+        
+        {%elif id == 'adrequest'%}
+        <div class="container-1-1">
+            <div class="left-col-1-1">
+                <div class="campaign-block">
+                    <h3 class="link-button">All Existing Ad requests send by you</h3>
+                    {%if publicAD|length == 0 %}
+                    <h3 style="color: rgb(148, 142, 142);">No Ad requests send.<br>
+                        Search campaign & make Ad requests for existing campaign.</h3>
+                    {% else %}
+                    <ol>
+                        {% for ad in publicAD%}
+                        <li>
+                            <h3>Request ID : {{ad.adId}}</h3>
+                            Request For : {{ad.campaign_id}}</br>
+                            {%if ad.status == 'pending' %}
+                            Status : <span style="color: yellow;">{{ad.status}}</span>
+                            {%elif ad.status == 'accepted' %}
+                            Status : <span style="color: green;">{{ad.status}}</span>
+                            {%else%}
+                            Status : <span style="color: red;">{{ad.status}}</span>
+                            {%endif%}
+                            <div class="inner-block">
+                                <a class="link-button" href=""> View</a>
+                                <a class="link-button" href=""> Edit</a>
+                                <a class="link-button" style="background-color: rgb(204, 47, 47);"
+                                    href=""> Delete</a>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="right-col-1-1">
+                <div class="campaign-block">
+                    <h3 class="link-button">All Ad requests received from campaign</h3>
+                    {%if privateAD|length == 0 %}
+                    <h3 style="color: rgb(148, 142, 142);">Not received any Ad Requests.</h3>
+                    {% else %}
+                    <ol>
+                        {% for ad in privateAD%}
+                        <li>
+                            <h3>Request ID : {{ad.adId}}</h3>
+                            Request For : {{ad.campaign_id}}</br>
+                            {%if ad.status == 'pending' %}
+                            Status : <span style="color: yellow;">{{ad.status}}</span>
+                            {%elif ad.status == 'accepted' %}
+                            Status : <span style="color: green;">{{ad.status}}</span>
+                            {%else%}
+                            Status : <span style="color: red;">{{ad.status}}</span>
+                            {%endif%}
+                            <div class="inner-block">
+                                <a class="link-button" href="{{url_for('take_action',flag='rv',ad_id=ad.adId)}}"> View</a>
+                            </div>
+                                
+                        </li>
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        {%elif id == 'stat'%}
+        {%endif%}
+        <footer>
+            @created with love, by poku & aaku
+        </footer>
+        
+    </body>
+    
+</html>
+                    
+                    
+        
+                    

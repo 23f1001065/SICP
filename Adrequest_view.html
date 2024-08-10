@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="device-width, initial-scale=1">
+    <title>Sponsor | Dashboard</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='home.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-left-col">
+            <img src="{{url_for('static', filename='uploads/'+image) }}" alt="Profile Picture"
+                class="header-profile-picture">
+            <h2 class="h2">{{name}}</h2><br>
+        </div>
+        <div class="header-right-col">
+            <section class="campaign-block">
+                <a href="{{url_for('sponsor_profile')}}" class="link-button">Profile</a>
+                <a href="{{url_for('campaigns')}}" class="link-button">Campaigns</a>
+                <a href="{{url_for('search_influencers')}}" class="link-button">Search</a>
+                <a href="" class="link-button">Statistics</a>
+                <a href="{{url_for('sponsor_logout')}}" class="link-button">logout</a>
+            </section>
+        </div>
+    </div>
+    <hr>
+    <div class="container">
+        <div class="left-col">
+            <div class="campaign-block">
+                <h3>Request ID: {{adrequest.adId}}</h3>
+                <div class="inner-block">
+                    <a class="link-button" href="{{url_for('about_adrequest',flag='v',ad_id=adrequest.adId)}}"> View</a>
+                    <a class="link-button" href="{{url_for('about_adrequest',flag='e',ad_id=adrequest.adId)}}">Edit</a>
+                    <a class="link-button" style="background-color: rgb(204, 47, 47);"
+                        href="{{url_for('about_adrequest',flag='d',ad_id=adrequest.adId)}}"> Delete</a>
+                </div>
+            </div>
+        </div>
+    {%if id == 'view'%}
+        <div class="right-col">
+            <h3>Request ID : {{adrequest.adId}}</h3>
+            <p>
+                Request For : {{adrequest.campaign_id}}<br>
+                Request To : {{adrequest.influencer_id}}<br>
+                Messages : {{adrequest.messages}}<br>
+                Requirements : {{adrequest.requirements}}<br>
+                Payment_amount : {{adrequest.payment_amount}}/-<br>
+                {%if adrequest.status == 'pending' %}
+                Status : <span style="color: yellow;">{{adrequest.status}}</span>
+                {%elif adrequest.status == 'accepted' %}
+                Status : <span style="color: green;">{{adrequest.status}}</span>
+                {%else%}
+                Status : <span style="color: red;">{{adrequest.status}}</span>
+                {%endif%}<br>
+                Send Date : {{adrequest.send_date}}<br>
+            </p>
+            {%if adrequest.nego_message %}
+            <h3>Negotiation Received</h3>
+            <p>
+                Negotiate message from influencer : {{adrequest.nego_message}}<br>
+                Negotiate Amount : {{adrequest.nego_amount}}<br>
+                Negotiate Status : {{adrequest.nego_status}}<br>
+            </p>
+            {%endif%}
+            {%if adrequest.nego_message and adrequest.nego_status == 'pending' %}
+            <form action="/sponsor_dashboard/ng/{{adrequest.adId}}" method="POST">
+                Do you agree with this negotiation?Once agreed it can not be reverted.<br>
+                <select name="choice" required>
+                    <option value="" disabled selected>select</option>
+                    <option value="yes">yes</option>
+                    <option value="no">no</option>
+                </select>
+                <button type="submit">Send</button>
+            </form> 
+            {%endif%}
+        </div>
+            
+                
+            
+                
+    {%elif id == 'edit'%}
+    <div class="right-col">
+        <h3 class="link-button">Private AD request to {{adrequest.influencer_id}}</h3>
+        <form action="/sponsor_dashboard/e/{{adrequest.adId}}" method="POST">
+            <label>Sent To</label><br>
+            <input type="text" name="id" value="{{adrequest.influencer_id}}" required readonly><br>
+            <label>Messages</label><br>
+            <textarea placeholder="messages" name="message" maxlength="100" required>{{adrequest.messages}}</textarea><br>
+            <label>Requirements</label><br>
+            <textarea name="requirements"  maxlength="100" required>{{adrequest.requirements}}</textarea><br>
+            <label>Payment_amount</label><br>
+            <input type="number" name="amount" step="0.01" value="{{adrequest.payment_amount}}" required><br>
+    
+            <button type="submit">Update</button>
+            
+        </form>
+    </div>
+    {%elif id == 'delete'%}
+    <div class="right-col">
+        <form action="/sponsor_dashboard/d/{{adrequest.adId}}" method="POST">
+            <p style="color: red;">Do You Really Want to delete? Once deleted it can not be restored.</p>
+            <select type="text" name="choice" required>
+                <option value="" selected disabled>Select</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    {%endif%}
+</body>
+</html>
+    
+    

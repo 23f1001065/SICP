@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="device-width, initial-scale=1">
+        <title>Sponsor | Dashboard</title>
+        <link rel="stylesheet" type="text/css" href="..\static\home.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="header-left-col">
+                <img src="..\static\uploads\{{image}}" alt="Profile Picture" class="header-profile-picture">
+                <h2 class="h2">{{name}}</h2><br>
+            </div>
+            <div class="header-right-col">
+                <section class="campaign-block">
+                    <a href="{{url_for('sponsor_profile')}}" class="link-button">Profile</a>
+                    <a href="{{url_for('campaigns')}}" class="link-button">Campaigns</a>
+                    <a href="{{url_for('search_influencers')}}" class="link-button">Search</a>
+                    <a href="" class="link-button">Statistics</a>
+                    <a href="{{url_for('sponsor_logout')}}" class="link-button">logout</a>
+                </section>
+
+            </div>
+        </div>
+        <hr>
+        
+        
+
+        {%if id == 'profile'%}
+            <div class="container">
+                <div class="left-col">
+                    <img src="..\static\uploads\{{sponsor.profile_image}}" alt="Profile Picture" class="body-profile-picture">
+                    <p>{{sponsor.name}}</p>
+                    <form action="/sponsor_dashboard/profile_pic/upload" method="POST" enctype="multipart/form-data">
+                        <label>Edit Profile Picture</label><br>
+                        <input type="file" name="profile_pic" accept=".png,.jpg,.jpeg,.svg" required><br>
+                        <button type="submit">Update</button>
+                    </form>
+                </div>
+                
+                <div class="right-col">
+                    <form action="/sponsor_dashboard/profile" method="POST">
+                        <label>User_ID</label><br>
+                        <input type="text" name="ID" value="{{sponsor.sponsor_id}}" required readonly><br>
+                        <label>Name</label><br>
+                        <input type="name" name="name" value="{{sponsor.name}}" required><br>
+                        <label>Email</label><br>
+                        <input type="email" name="email" value="{{sponsor.email}}" required><br>
+                        <label>Mobile No</label><br>
+                        <input type="text" name="mobno" value="{{sponsor.mobileno}}" required maxlength="10" minlength="10"><br>
+                        <label>Password</label><br>
+                        <input type="text" name="password" value="{{sponsor.password}}" required><br>
+                        
+                        <label>Budget</label><br>
+                        <input type="number" name="budget" value="{{sponsor.budget}}" min="0" step="0.01" required> Rs.<br>
+                        <label>Industry</label><br>
+                        <input type="text" name="industry" value="{{sponsor.industry}}" required><br>
+                        <label>Website</label><br>
+                        <input type="url" name="website" value="{{sponsor.website_link}}" placeholder="your website url" required><br>
+                        <div style="padding-left: 4.3cm;">
+                            <button type="submit" >Update</button>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        
+        {%elif id == 'campaigns'%}
+            <div class="campaign-block">
+                <div class="inner-block" style="text-align: right;">
+                    <a class="link-button" href="{{url_for('create_campaigns')}}"> + Create campaign</a>
+                </div>
+                {%if campaigns|length == 0 %}
+                    <h1>No Campaigns !!</h1>
+                    <h1>Create campaign</h1>
+                {% else %}
+                <h3 class="link-button">All Existing Campaigns </h3>
+                <ol>
+                    {% for campaign in campaigns%}
+                    <li>
+                        <h3>Campaing ID : {{campaign.campaign_id}}</h3>
+                            Name : {{campaign.name}}</br>
+                            Status : {{campaign.current_status}}<br>
+                            Industry:{{campaign.industry}}
+                        <div class="inner-block">
+                            <a class="link-button" href="{{url_for('about_camp',flag='v' ,camp_id=campaign.campaign_id)}}"> View</a>
+                            <a class="link-button" href="{{url_for('about_camp',flag='edit',camp_id=campaign.campaign_id)}}"> Edit</a>
+                            <a class="link-button" style="background-color: rgb(204, 47, 47);" href="{{url_for('about_camp',flag='delete',camp_id=campaign.campaign_id)}}"> Delete</a>
+                        </div>
+                    </li>    
+                    {% endfor %}
+                </ol>
+                {% endif %}
+            </div>
+                        
+                        
+                
+            
+        
+        
+        {%elif id == 'create'%}
+        
+            <form action="/sponsor_campaigns/create" method="POST" style="margin: 1cm 0cm 0cm 2cm; height: 20cm;">
+                <h3 class="link-button">Create New Campaign</h3>
+                <lebel>Name</lebel><br>
+                <input type="text" name="name" placeholder="name of campaign" required><br>
+                <lebel>Industry</lebel><br>
+                <input type="text" name="industry" placeholder="associated industry" required><br>
+                <lebel>Start Date</lebel><br>
+                <input type="date" name="start_date" placeholder="start of campaign" required><br>
+                <lebel>End Date</lebel><br>
+                <input type="date" name="end_date" placeholder="end of campaign" required><br>
+                <lebel>Budget</lebel><br>
+                <input type="number" name="budget" placeholder="budget of campaign" min="0" step="0.01"  required>(in Rs.)<br>
+                <lebel>Visibility</lebel><br>
+                <select type="text" name="visibility" required>
+                    <option value="" selected disabled>Select</option>
+                    <option value="public">public</option>
+                    <option value="private">private</option>
+                </select><br>
+                <lebel>Current Status</lebel><br>
+                <select type="text" name="status" required>
+                    <option value="" selected disabled>Select</option>
+                    <option value="open">open</option>
+                    <option value="closed">closed</option>
+                </select><br>
+                <lebel>Goals</lebel><br>
+                <textarea name="goals" placeholder="goals of campaign"  maxlength="50" required></textarea><br>
+                <lebel>Description</lebel><br>
+                <textarea name="description" placeholder="description of campaign"  maxlength="50" required></textarea><br>
+                <button type="submit">Save</button>
+            </form>
+        
+        {%elif id == 'search'%}
+            <form action="/sponsor_dashboard/search_influencers" method="GET" class="search-box">
+                <input type="search" name="niche" placeholder="Search influencer ...(ex-food,lifestyle,gadget etc)" required>
+                <input type="number" name="min_follower" placeholder="min follower..." required>
+                <button type="submit">search</button>
+            </form>
+            <div class="campaign-block">
+                
+                {%if not empty_q and influencers|length == 0%}
+                <section style="color: grey;">
+                    <h2>Not found any influencer based on the search query</h2>
+                    <p>please provide search query like Ex-<br>
+                        If Influencer work in Food industry type 'food'<br>
+                        If work is in textile industry type 'textile' etc
+                    </p>
+                </section>
+                {%else%}
+                <h3 class="link-button">All Influencers</h3>
+                <ol>
+                    {% for influencer in influencers%}
+                    <li>
+                        <section class="header-left-col">
+                            <img src="..\static\uploads\{{influencer.profile_image}}" alt="Profile Picture" class="header-profile-picture">
+                            <h2>{{influencer.name}}</h2>
+                        </section><br>
+                        <section style="margin-left: 1.5cm;">
+                            Category : {{influencer.category}}<br>
+                            Interest : {{influencer.niche}}<br>
+                        </section>    
+                        
+                        <div class="inner-block" style="margin-left: 1.5cm;">
+                            <a class="link-button" href="{{url_for('find_influencers', influencer_id=influencer.influencer_id)}}"> View</a>
+                        </div>
+                    </li>
+                    <hr>
+                    {% endfor %}
+                </ol>
+                {% endif %}
+            </div>
+        {%elif id == 'Adrequest'%}
+        <div class="container-1-1">
+            <div class="left-col-1-1">
+                <div class="campaign-block">
+                    <h3 class="link-button">All Existing Ad requests made by you</h3>
+                    {%if privateADrequests|length == 0 %}
+                    <h3 style="color: rgb(148, 142, 142);">No private Ad requests.<br>
+                        Search influencers & make private Ad requests for existing campaign.</h3>
+                    {% else %}
+                    <ol>
+                        {% for ad in privateADrequests%}
+                        <li>
+                            <h3>Request ID : {{ad.adId}}</h3>
+                            Request For : {{ad.campaign_id}}</br>
+                            Request to : {{ad.influencer_id}}<br>
+                            {%if ad.status == 'pending' %}
+                            Status : <span style="color: yellow;">{{ad.status}}</span>
+                            {%elif ad.status == 'accepted' %}
+                            Status : <span style="color: green;">{{ad.status}}</span>
+                            {%else%}
+                            Status : <span style="color: red;">{{ad.status}}</span>
+                            {%endif%}<br>
+                            <div class="inner-block">
+                                <a class="link-button" href="{{url_for('about_adrequest',flag='v',ad_id=ad.adId)}}"> View</a>
+                                <a class="link-button" href="{{url_for('about_adrequest',flag ='e',ad_id=ad.adId)}}"> Edit</a>
+                                <a class="link-button" style="background-color: rgb(204, 47, 47);"
+                                    href="{{url_for('about_adrequest',flag='d',ad_id=ad.adId)}}"> Delete</a>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                
+                </div>
+            </div>
+            <div class="right-col-1-1">
+                <div class="campaign-block">
+                    <h3 class="link-button">All received Ad requests from influencers</h3>
+                    {%if publicADrequests|length == 0 %}
+                    <h3 style="color: rgb(148, 142, 142);">Not received any Ad Requests.</h3>
+                    {% else %}
+                    <ol>
+                        {% for ad in publicADrequests%}
+                        <li>
+                            <h3>Request ID : {{ad.adId}}</h3>
+                            Request For : {{ad.campaign_id}}</br>
+                            Request From : {{ad.influencer_id}}<br>
+                            {%if ad.status == 'pending' %}
+                            Status : <span style="color: yellow;">{{ad.status}}</span>
+                            {%elif ad.status == 'accepted' %}
+                            Status : <span style="color: green;">{{ad.status}}</span>
+                            {%else%}
+                            Status : <span style="color: red;">{{ad.status}}</span>
+                            {%endif%}<br>
+                            <div class="inner-block">
+                                <a class="link-button" href=""> View</a>
+                                <a class="link-button" href="" style="background-color: rgb(43, 107, 31);"> Accept</a>
+                                <a class="link-button" style="background-color: rgb(204, 47, 47);"
+                                    href=""> Reject</a>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {%elif id == 'stat'%}
+        {%endif%}
+        <footer>
+            @created with love, by poku & aku
+        </footer>
+            
+    </body>
+</html>
+    
+            
+
+            
+            
+                

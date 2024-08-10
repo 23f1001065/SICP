@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="device-width initial-scale=1">
+        <title>Sponsor|registration</title>
+        <link rel="stylesheet" href="..\static\register.css">
+    </head>
+    <body>
+        <div style="height: 18.5cm;">
+            <h1>Create an account</h1>
+            <hr>
+            <p>please enter your details here.</p>
+            <form action="/sponsor/register" method="POST">
+                <label>Name</label><br>
+                <input type="text" name="name" placeholder="your name" required><br>
+                <label>Work Email</label><br>
+                <input type="email" name="email" placeholder="email" required><br>
+                <label>Mobile No</label><br>
+                <input type="text" name="mobno" placeholder="Mobno" required maxlength="10"><br>
+                <label>Industry</label><br>
+                <input type="text" name="industry" placeholder="Industry" required><br>
+                <label>Password</label><br>
+                <input type="text" name="password" placeholder="password" required><br>
+                <P>Don't worry you can update any field Later.</P>
+                <button type="submit" >Get Started</button>
+            </form>
+            <p>Have an account?<a href="{{url_for('sponsor_login')}}">Login</a></p>
+            <p>go back to home<a href="{{url_for('home')}}">Home</a></p>
+        </div>
+        <footer>
+            @created with love, by poku-aku
+        </footer>
+    </body>
+</html>
