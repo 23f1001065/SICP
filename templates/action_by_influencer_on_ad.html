@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="device-width, initial-scale=1">
+    <title>Influencer | Dashboard</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='home.css')}}">
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-left-col">
+            <img src="{{url_for('static',filename='uploads/'+image)}}" alt="Profile Picture"
+                class="header-profile-picture">
+            <h2 class="h2">{{name}}</h2>
+        </div>
+        <div class="header-right-col">
+            <section class="campaign-block">
+                <a href="{{url_for('influencer_dashboard')}}" class="link-button">Home</a>
+                <a href="{{url_for('influencer_profile')}}" class="link-button">Profile</a>
+                <a href="{{url_for('influencer_search')}}" class="link-button">Search</a>
+                <a href="{{url_for('influencer_stat')}}" class="link-button">Statistics</a>
+                <a href="{{url_for('influencer_logout')}}" class="link-button">logout</a>
+            </section>
+        </div>
+    </div>
+    <hr>
+    {%if id == 'rview'%}
+    <div class="container">
+        <div class="left-col">
+            <h3 class="link-button">Adrequest</h3>
+            <p>
+                Request Id : {{adrequest.adId}}
+            </p>
+            <a href="{{url_for('influencer_dashboard')}}" class="link-button">Back to dashboard</a>
+        </div>
+        <div class="right-col">
+            <h3 class="link-button">Details of adrequest</h3>
+            <p>
+                Request For     :   {{adrequest.campaign_id}}<br>
+                Request From    :   {{adrequest.createdby}}<br>
+                Messages        :   {{adrequest.messages}}<br>
+                Requirements    :   {{adrequest.requirements}}<br>
+                Payment_amount  :   {{adrequest.payment_amount}}/-<br>
+                {%if adrequest.status == 'pending' %}
+                Status : <span style="color: yellow;">{{adrequest.status}}</span>
+                {%elif adrequest.status == 'accepted' %}
+                Status : <span style="color: green;">{{adrequest.status}}</span>
+                {%else%}
+                Status : <span style="color: red;">{{adrequest.status}}</span>
+                {%endif%}<br>
+                Send Date       :   {{adrequest.send_date}}<br>   
+            </p>
+            <div class="container-1-1">
+                <div class="left-col-1-1">
+                    <h3 class="link-button">Details of this sponsor</h3>
+                    <p>
+                        Sponsor name : {{sponsor.name}}<br>
+                        contact No : {{sponsor.mobileno}}<br>
+                        Budget : {{sponsor.budget}}<br>
+                        Industry : {{sponsor.industry}}<br>
+                        WebSite link : {{sponsor.website_link}}<br>
+                    </p>
+                </div>
+                <div class="right-col-1-1">
+                    <h3 class="link-button">Deiails of this campaign</h3>
+                    <p>
+                        Campaign name : {{camp.name}}<br>
+                        Industry : {{camp.industry}}<br>
+                        Start Date : {{camp.start_date}}<br>
+                        End Date : {{camp.end_date}}<br>
+                        Budget : {{camp.budget}}<br>
+                        Goals : {{camp.goals}}<br>
+                        Description : {{camp.description}}<br>
+                        Created Date: {{camp.created_date}}<br>
+                        Current status : {{camp.current_status}}<br>
+                    </p>
+                </div>
+            </div>
+            {%if adrequest.nego_message %}
+            <div class="inner-block">
+                <p>
+                    Negotiate Message : {{adrequest.nego_message}}<br>
+                    Negotiate Amount  : {{adrequest.nego_amount}}<br>
+                    {%if adrequest.nego_status == 'pending' %}
+                    Negotiate Status : <span style="color: yellow;">{{adrequest.status}}</span>
+                    {%elif adrequest.nego_status == 'accepted' %}
+                    Negotiate Status : <span style="color: green;">{{adrequest.status}}</span>
+                    {%else%}
+                    Negotiate Status : <span style="color: red;">{{adrequest.status}}</span>
+                    {%endif%}<br>
+                </p>
+            </div>
+            {%endif%}
+            {%if adrequest.status == 'pending'%}
+            <div class="inner-block">
+                <a class="link-button" style="background-color: rgb(43, 107, 31);" href="{{url_for('take_action',flag='ra',ad_id=adrequest.adId)}}" >Accept</a>
+                <a class="link-button" style="background-color: rgb(138, 79, 79);" href="{{url_for('take_action',flag='ng',ad_id=adrequest.adId)}}">NegoTiate</a>
+                <a class="link-button" style="background-color: rgb(204, 47, 47);" href="{{url_for('take_action',flag='rr',ad_id=adrequest.adId)}}">Reject</a>
+            </div>
+            {%else%}
+            <div class="inner-block">
+                <h3 style="color: greenyellow;">You accepted this request.</h3>
+            </div>
+            {%endif%}
+        </div>
+                
+                
+
+    </div>
+    {%elif id == 'raccept'%}
+    <div class="container">
+        <div class="left-col">
+            <h3 class="link-button">Adrequest</h3>
+            <p>
+                Request Id : {{adrequest.adId}}
+            </p>
+            <a href="{{url_for('influencer_dashboard')}}" class="link-button">Back to dashboard</a>
+        </div>
+        <div class="right-col">
+            <form action="/influencer_dashboard/adrequest/ra/{{adrequest.adId}}" method="POST">
+                <p style="color: greenyellow;">Do You Really Want to Accept this request? Once accepted you can not reject later.</p>
+                <select type="text" name="choice" required>
+                    <option value="" selected disabled>Select</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select><br>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    {%elif id == 'rnegotiate'%}
+    <div class="container">
+        <div class="left-col">
+            <h3 class="link-button">Adrequest</h3>
+            <p>
+                Request Id : {{adrequest.adId}}
+            </p>
+            <a href="{{url_for('influencer_dashboard')}}" class="link-button">Back to dashboard</a>
+        </div>
+        <div class="right-col">
+            <form action="/influencer_dashboard/adrequest/ng/{{adrequest.adId}}" method="POST">
+                <p style="color: greenyellow;">Do You Want to negotiate the payment amount?</p>
+                <label>Message</label><br>
+                <textarea name="message" placeholder="send message" required></textarea><br>
+                <label>Amount</label><br>
+                <input type="number" name="negotiate" step="0.01" placeholder="enter you negotiated amount" required><br>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    {%elif id == 'rreject'%}
+    <div class="container">
+        <div class="left-col">
+            <h3 class="link-button">Adrequest</h3>
+            <p>
+                Request Id : {{adrequest.adId}}
+            </p>
+            <a href="{{url_for('influencer_dashboard')}}" class="link-button">Back to dashboard</a>
+        </div>
+        <div class="right-col">
+            <form action="/influencer_dashboard/adrequest/rr/{{adrequest.adId}}" method="POST">
+                <p style="color: greenyellow;">Do You Really Want to Reject this request? Once rejected you can not accept
+                    later.
+                </p>
+                <select type="text" name="choice" required>
+                    <option value="" selected disabled>Select</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select><br>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    {%elif id == 'sview'%}
+    {%elif id == 'sedit'%}
+    {%elif id == 'sdelete'%}
+    {%endif%}
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="device-width, initial-scale=1">
+        <title>Message</title>
+        <link rel="stylesheet" href="..\static\login.css">
+    </head>
+    <body>
+        {% if id == 'SPEX' %}
+            <p>
+                You are already registered with this Email.<br>
+                Please login with your credentials.
+            </p>
+            <a href="{{url_for('sponsor_login')}}" class="a">login</a>
+        {% elif id == 'INEX' %}
+            <p>
+                You are already registered eith this Email.
+                Please login with your credentials.
+            </p>
+            <a href="{{url_for('influencer_login')}}" class="a">login</a>
+        {% elif id == 'SPRSUCC' %}
+            <p style="color: lightgreen;">You are successfully registered.</p>
+            <p>
+                Your Email is {{email}}
+                Yoyr Password is {{password}}
+                Please save these credentials and login using these.
+            </p>
+            <a href="{{url_for('sponsor_login')}}" class="a">login</a>
+        {% elif id == 'INRSUCC' %}
+            <h2 style="color: greenyellow;">You are successfully registered.</h2>
+            <p>
+                Your Email is <span>{{influencer_email}}</span>
+                Your Password is <span>{{password}}</span>
+                Please save these credentials and login using these.
+            </p>
+            <a href="{{url_for('influencer_login')}}" class="a">login</a>
+        {% elif id == 'IUPSUCC' %}
+            <h2 style="color: lightgreen;">Profile successfully updated.</h2>
+            <p>
+                Your Email is <span>{{email}}</span>
+                Your New Password is <span>{{password}}</span>
+                Please save these credentials.
+            </p>
+            <a href="{{url_for('influencer_profile')}}" class="a">Profile</a>
+        {% elif id == 'SUPSUCC' %}
+            <h2 style="color: lightgreen;">Profile successfully updated.</h2>
+            <p>
+                Your Sponsor Email is <span>{{email}}</span>
+                Your New Password is <span>{{password}}</span>
+                Please save these credentials.
+            </p>
+            <a href="{{url_for('sponsor_profile')}}" class="a">Profile</a>
+        {% elif id == 'SPINVALID' %}
+            <h2 style="color: rgb(231, 108, 108);">Invaild login credential provided !!</h2>
+            <p>
+                Please provide correct Email and password
+            </p>
+            <a href="{{url_for('sponsor_login')}}" class="a">login</a>
+        {% elif id == 'ININVALID' %}
+            <h2 style="color: rgb(231, 108, 108);">Invaild login credential provided !!</h2>
+            <p>
+                Please provide correct Email and password
+            </p>
+            <a href="{{url_for('influencer_login')}}" class="a">login</a>
+
+        {% elif id == 'DBERROR' %}
+            <h2>Temporarily Service unavailabe:( </h2>
+            <p>
+                <h4>We are very sorry.</h4>
+                There is a server issue.We are working on it.<br>
+                Please wait for sometime it will be restored very soon.<br>
+                {{error}}
+            </p>
+        {% endif %}
+        <p>Or go to <a href="{{url_for('home')}}" class="a">home</a></p>
+    </body>
+</html>
+        
+
+
+
+
+        
+
+
