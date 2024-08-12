@@ -7,4 +7,4 @@ class ProjectDevelopmentConfig():
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(SQLITE_DB_DIR,'projectDB.db')
     DEBUG = False
     SECRET_KEY = token_urlsafe()
-    UPLOAD_FOLDER = 'static\\uploads'
+    UPLOAD_FOLDER = 'static/uploads'
