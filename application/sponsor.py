@@ -1,7 +1,7 @@
 import os
 from flask import render_template, request,redirect,url_for,session
 from flask import current_app as app
-from numpy import delete
+#from numpy import delete
 from werkzeug.utils import secure_filename
 from application import influencer
 from application.models import Sponsor,Campaign,Influencer,Adrequest,db
