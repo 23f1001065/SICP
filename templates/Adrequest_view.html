@@ -63,11 +63,11 @@
                 Negotiate message from influencer : {{adrequest.nego_message}}<br>
                 Negotiate Amount : {{adrequest.nego_amount}}<br>
                 {%if adrequest.nego_status == 'pending' %}
-                Negotiate Status : <span style="color: yellow;">{{adrequest.status}}</span>
+                Negotiate Status : <span style="color: yellow;">{{adrequest.nego_status}}</span>
                 {%elif adrequest.nego_status == 'accepted' %}
-                Negotiate Status : <span style="color: rgb(91, 187, 13);">{{adrequest.status}}</span>
+                Negotiate Status : <span style="color: rgb(91, 187, 13);">{{adrequest.nego_status}}</span>
                 {%else%}
-                Negotiate Status : <span style="color: red;">{{adrequest.status}}</span>
+                Negotiate Status : <span style="color: red;">{{adrequest.nego_status}}</span>
                 {%endif%}<br>
             </p>
             {%endif%}

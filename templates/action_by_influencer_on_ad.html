@@ -85,11 +85,11 @@
                     Negotiate Message : {{adrequest.nego_message}}<br>
                     Negotiate Amount  : {{adrequest.nego_amount}}<br>
                     {%if adrequest.nego_status == 'pending' %}
-                    Negotiate Status : <span style="color: yellow;">{{adrequest.status}}</span>
+                    Negotiate Status : <span style="color: yellow;">{{adrequest.nego_status}}</span>
                     {%elif adrequest.nego_status == 'accepted' %}
-                    Negotiate Status : <span style="color: green;">{{adrequest.status}}</span>
+                    Negotiate Status : <span style="color: green;">{{adrequest.nego_status}}</span>
                     {%else%}
-                    Negotiate Status : <span style="color: red;">{{adrequest.status}}</span>
+                    Negotiate Status : <span style="color: red;">{{adrequest.nego_status}}</span>
                     {%endif%}<br>
                 </p>
             </div>
