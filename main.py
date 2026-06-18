@@ -8,10 +8,10 @@ from application.database import db
 """
 app = Flask(__name__,static_folder='static')
 app.config.from_object(ProjectDevelopmentConfig)
+app.app_context().push() 
 db.init_app(app)
 
 
-app.app_context().push() 
 
 @app.route("/", methods=["GET"])
 def home():
