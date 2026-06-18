@@ -10,8 +10,7 @@ app = Flask(__name__,static_folder='static')
 app.config.from_object(ProjectDevelopmentConfig)
 db.init_app(app)
 
-with app.app_context():
-    db.create_all()
+
 
 
 @app.route("/", methods=["GET"])
