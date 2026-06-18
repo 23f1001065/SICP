@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from application.config import ProjectDevelopmentConfig
 from application.database import db
 """`this app is the main application context.
@@ -11,7 +11,7 @@ app.config.from_object(ProjectDevelopmentConfig)
 db.init_app(app)
 
 
-app.app_context().push()
+
     
 
 @app.route("/", methods=["GET"])
