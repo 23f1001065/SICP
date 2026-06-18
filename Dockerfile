@@ -24,4 +24,4 @@ COPY --chown=user . .
 EXPOSE 7860
 
 # 8. Command to start the Flask application
-CMD ["flask", "run", "--host=0.0.0.0", "--port=7860"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=7860", "--debug=false"]
