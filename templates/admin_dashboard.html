@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="device-width, initial-scale=1">
+        <title>Admin</title>
+        <link rel="stylesheet" href="..\static\admin.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="header-left-col">
+                <h2>Admin-{{name}}</h2>
+            </div>
+            <div class="header-right-col">
+                <div class="campaign-block">
+                    <a href="" class="link-button">Profile</a>
+                    <a href="" class="link-button">Search</a>
+                    <a href="" class="link-button">Statistics</a>
+                    <a href="{{url_for('admin_logout')}}" class="link-button">logout</a>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="container-1-1">
+            <div class="left-col-1-1">
+                <div class="container-1-1">
+                    <div class="left-col-1-1">
+                        <h3 class="link-button">Total registered Sponsors</h3>
+                        <table>
+                            <tr><td><h1>{{sponsors|length}}</h1></td></tr>
+                        </table><br>
+                        <section>
+                            <ol>
+                                {%for s in sponsors%}
+                                <li>{%if s.status == 1%}
+                                    <a href="{{url_for('view_users',flag='vs',id=s.sponsor_id)}}" class="a">{{s.sponsor_id}}</a>
+                                    <span style="color: greenyellow;">(Active)</span>
+                                    {%else%}
+                                    <a href="{{url_for('view_users',flag='vs',id=s.sponsor_id)}}" class="a">{{s.sponsor_id}}</a>
+                                    <span style="color:rgb(72, 140, 230) ;">(Inactive)</span>
+                                    {%endif%}
+                                </li>
+                                {%endfor%}
+                            </ol>
+                        </section>
+                        
+                        
+                    </div>
+                    <div class="right-col-1-1">
+                        <h3 class="link-button">Total registered Influencers</h3>
+                        <table>
+                            <tr>
+                                <td><h1>{{influencers|length}}</h1></td>
+                            </tr>
+                        </table><br>
+                        <section>
+                            <ol>
+                                {%for i in influencers%}
+                                <li>{%if i.status == 1%}
+                                    <a href="{{url_for('view_users',flag='vi',id=i.influencer_id)}}" class="a">{{i.influencer_id}}</a><span style="color: greenyellow;">(Active)</span>
+                                    {%else%}
+                                    <a href="{{url_for('view_users',flag='vi',id=i.influencer_id)}}" class="a">{{i.influencer_id}}</a><span style="color:rgb(72, 140, 230) ;">(Inactive)</span>
+                                    {%endif%}
+                                </li>
+                                {%endfor%}
+                            </ol>
+                        </section>
+                        
+                    </div>
+                </div>
+                
+            </div>
+            <div class="right-col-1-1">
+                <div class="container-1-1">
+                    <div class="left-col-1-1">
+                        <h3 class="link-button">Total campaigns registered</h3>
+                        <table>
+                            <tr>
+                                <td><h1>{{campaigns|length}}</h1></td>
+                            </tr>
+                        </table><br>
+                        <section>
+                            <ol>
+                                {%for c in campaigns%}
+                                <li>{%if c.current_status == 'open'%}
+                                    <a href="{{url_for('view_users',flag='vc',id=c.campaign_id)}}" class="a">{{c.campaign_id}}</a><span style="color: greenyellow;">(OPEN)</span>
+                                    {%else%}
+                                    <a href="{{url_for('view_users',flag='vc',id=c.campaign_id)}}" class="a">{{c.campaign_id}}</a><span style="color:rgb(219, 25, 25) ;">(CLOSED)</span>
+                                    {%endif%}
+                                </li>
+                                {%endfor%}
+                            </ol>
+                        </section>
+                
+                
+                    </div>
+                    <div class="right-col-1-1">
+                        <h3 class="link-button">Total adrequest made</h3>
+                        <table>
+                            <tr>
+                                <td><h1>{{adrequests|length}}</h1></td>
+                            </tr>
+                        </table><br>
+                        <section>
+                            <ol>
+                                {%for ad in adrequests%}
+                                <li>{%if ad.status == 'accepted'%}
+                                    <a href="" class="a">{{ad.adId}}</a><span style="color: greenyellow;">(ACCEPTED)</span>
+                                    {%elif ad.status == 'pending'%}
+                                    <a href="" class="a">{{ad.adId}}</a><span style="color:rgb(241, 180, 14) ;">(PENDING)</span>
+                                    {%else%}
+                                    <a href="" class="a">{{ad.adId}}</a><span style="color:rgb(241, 78, 14) ;">(REJECTED)</span>
+                                    {%endif%}
+                                </li>
+                                {%endfor%}
+                            </ol>
+                        </section>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        
+        
+    </body>
+</html>

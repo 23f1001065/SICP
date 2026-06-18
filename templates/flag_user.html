@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="device-width, initial-scale=1">
+    <title>Admin</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='admin.css')}}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-left-col">
+            <h2>Admin-{{name}}</h2>
+        </div>
+        <div class="header-right-col">
+            <div class="campaign-block">
+                <a href="{{url_for('admin_dashboard')}}" class="link-button">Dashboard</a>
+                <a href="" class="link-button">Profile</a>
+                <a href="" class="link-button">Search</a>
+                <a href="" class="link-button">Statistics</a>
+                <a href="{{url_for('admin_logout')}}" class="link-button">logout</a>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="inner-block">
+        {%if id == 'sponsor'%}
+        <table>
+            <tr>
+                <th>ID</th>
+                <td>{{sponsor.sponsor_id}}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{sponsor.name}}</td>
+            </tr>
+            <tr>
+                <th>Budget</th>
+                <td>{{sponsor.budget}}</td>
+            </tr>
+            <tr>
+                <th>Industry</th>
+                <td>{{sponsor.industry}}</td>
+            </tr>
+            <tr>
+                <th>Registered Date</th>
+                <td>{{sponsor.created_date}}</td>
+            </tr>
+            <tr>
+                <th>Last_login</th>
+                <td>{{sponsor.last_login}}</td>
+            </tr>
+            <tr>
+                <th>Website</th>
+                <td><a href="{{sponsor.website_link}}">LINK</a></td>
+            </tr>
+            <tr>
+                <th>Flaged Status</th>
+                {%if sponsor.flaged_status == 'flaged'%}
+                <td style="color: red;">{{sponsor.flaged_status}}</td>
+                {%else%}
+                <td style="color: rgb(12, 121, 17);">{{sponsor.flaged_status}}</td>
+                {%endif%}
+            </tr>
+        </table>
+        <form action="/admin_dashboard/view_users/vs/{{sponsor.sponsor_id}}" method="POST">
+            <label style="color: red;">Is this inappropriate Sponsor or ok? Mark This Sponsor if this is not ok.</label><br>
+            <select name="choice" required>
+                <option value="flaged">flag</option>
+                <option value="noflaged">unflag</option>
+            </select>
+                
+            <button type="submit">Enter</button>
+        </form>
+        {%elif id == 'influencer'%}
+        <table>
+            <tr>
+                <th>ID</th>
+                <td>{{influencer.influencer_id}}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{influencer.name}}</td>
+            </tr>
+            <tr>
+                <th>Category</th>
+                <td>{{influencer.category}}</td>
+            </tr>
+            <tr>
+                <th>Area of Expertise</th>
+                <td>{{influencer.niche}}</td>
+            </tr>
+            <tr>
+                <th>Follower</th>
+                <td>{{influencer.reach}}</td>
+            </tr>
+            <tr>
+                <th>Registered Date</th>
+                <td>{{influencer.created_date}}</td>
+            </tr>
+            <tr>
+                <th>Last_login</th>
+                <td>{{influencer.last_login}}</td>
+            </tr>
+            
+            <tr>
+                <th>Flaged Status</th>
+                {%if influencer.flaged_status == 'flaged'%}
+                <td style="color: red;">{{influencer.flaged_status}}</td>
+                {%else%}
+                <td style="color: rgb(12, 121, 17);">{{influencer.flaged_status}}</td>
+                {%endif%}
+            </tr>
+        </table>
+        <form action="/admin_dashboard/view_users/vi/{{influencer.influencer_id}}" method="POST">
+            <label style="color: red;">Is this inappropriate Sponsor or ok? Mark This Sponsor if this is not ok.</label><br>
+            <select name="choice" required>
+                <option value="flaged">flag</option>
+                <option value="noflaged">unflag</option>
+            </select>
+        
+            <button type="submit">Enter</button>
+        </form>
+        {%elif id == 'campaign'%}
+        <table>
+            <tr>
+                <th>ID</th>
+                <td>{{campaign.campaign_id}}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{campaign.name}}</td>
+            </tr>
+            <tr>
+                <th>Industry</th>
+                <td>{{campaign.industry}}</td>
+            </tr>
+            <tr>
+                <th>Start Date</th>
+                <td>{{campaign.start_date}}</td>
+            </tr>
+            <tr>
+                <th>End Date</th>
+                <td>{{campaign.end_date}}</td>
+            </tr>
+            <tr>
+                <th>Budget</th>
+                <td>{{campaign.budget}}</td>
+            </tr>
+            <tr>
+                <th>Registered Date</th>
+                <td>{{campaign.created_date}}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{campaign.description}}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{campaign.visibility}}</td>
+            </tr>
+            <tr>
+                <th>Created By</th>
+                <td>{{campaign.createdby}}</td>
+            </tr>
+        
+            <tr>
+                <th>Flaged Status</th>
+                {%if campaign.flaged_status == 'flaged'%}
+                <td style="color: red;">{{campaign.flaged_status}}</td>
+                {%else%}
+                <td style="color: rgb(12, 121, 17);">{{campaign.flaged_status}}</td>
+                {%endif%}
+            </tr>
+        </table>
+        <form action="/admin_dashboard/view_users/vc/{{campaign.campaign_id}}" method="POST">
+            <label style="color: red;">Is this inappropriate Sponsor or ok? Mark This Sponsor if this is not ok.</label><br>
+            <select name="choice" required>
+                <option value="flaged">flag</option>
+                <option value="noflaged">unflag</option>
+            </select>
+        
+            <button type="submit">Enter</button>
+        </form>
+        {%endif%}
+    </div>
+</body>
+</html>

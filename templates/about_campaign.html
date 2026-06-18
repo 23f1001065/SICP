@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="device-width, initial-scale=1">
+        <title>Sponsor | Dashboard</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='home.css') }}">
+    </head>
+    <body>
+        <div class="container">
+            <div class="header-left-col">
+                <img src="{{url_for('static', filename='uploads/'+image) }}" alt="Profile Picture" class="header-profile-picture">
+                <h2 class="h2">{{name}}</h2><br>
+            </div>
+            <div class="header-right-col">
+                <section class="campaign-block">
+                    <a href="{{url_for('sponsor_dashboard')}}" class="link-button">Home</a>
+                    <a href="{{url_for('sponsor_profile')}}" class="link-button">Profile</a>
+                    <a href="{{url_for('campaigns')}}" class="link-button">Campaigns</a>
+                    <a href="{{url_for('search_influencers')}}" class="link-button">Search</a>
+                    <a href="" class="link-button">Statistics</a>
+                    <a href="{{url_for('sponsor_logout')}}" class="link-button">logout</a>
+                </section>
+
+            </div>
+        </div>
+        <hr>
+        <div class="container">
+            <div class="left-col">
+                <div class="campaign-block">
+                    <h3>Campaing ID : {{campaign.campaign_id}}</h3>
+                    <div class="inner-block">
+                        <a class="link-button" href="{{url_for('about_camp',flag='v',camp_id=campaign.campaign_id)}}"> View</a>
+                        <a class="link-button" href="{{url_for('about_camp',flag='edit',camp_id=campaign.campaign_id)}}"> Edit</a>
+                        <a class="link-button" style="background-color: rgb(204, 47, 47);" href="{{url_for('about_camp',flag='delete',camp_id=campaign.campaign_id)}}"> Delete</a>
+                    </div>
+                </div>
+            </div>
+            {% if id == 'campaignView' %}
+            <div class="right-col">
+                <h3>Campaing ID : {{campaign.campaign_id}}</h3>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <td>{{campaign.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Start Date</th>
+                        <td>{{campaign.start_date}}</td>
+                    </tr>
+                    <tr>
+                        <th>End Date</th>
+                        <td>{{campaign.end_date}}</td>
+                    </tr>
+                    <tr>
+                        <th>Industry</th>
+                        <td>{{campaign.industry}}</td>
+                    </tr>
+                    <tr>
+                        <th>Budget</th>
+                        <td>{{campaign.budget}}</td>
+                    </tr>
+                    <tr>
+                        <th>Type</th>
+                        <td>{{campaign.visibility}}</td>
+                    </tr>
+                    <tr>
+                        <th>Goals</th>
+                        <td>{{campaign.goals}}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{campaign.description}}</td>
+                    </tr>
+                    <tr>
+                        <th>current Status</th>
+                        <td>{{campaign.current_status}}</td>
+                    </tr>
+                    <tr>
+                        <th>Create Date</th>
+                        <td>{{campaign.created_date}}</td>
+                    </tr>
+                </table>
+                    
+                
+            </div>
+            {%elif id == 'campaignEdit'%}
+                <div class="right-col">
+                    <h3>Campaing ID : {{campaign.campaign_id}}</h3>
+                    <form action="/sponsor_camp/edit/{{campaign.campaign_id}}" method="POST">
+                        <lebel>Name</lebel><br>
+                        <input type="text" name="name" value="{{campaign.name}}" required><br>
+                        <lebel>Start Date</lebel><br>
+                        <input type="date" name="start_date" value="{{campaign.start_date}}" required><br>
+                        <lebel>End Date</lebel><br>
+                        <input type="date" name="end_date" value="{{campaign.end_date}}" required><br>
+                        <lebel>Budget</lebel><br>
+                        <input type="number" name="budget" value="{{campaign.budget}}" min="0" step="0.01" required><br>
+                        <lebel>Visibility</lebel><br>
+                        <input type="text" name="visibility" value="{{campaign.visibility}}" required readonly><br>
+                            
+                        <lebel>Current Status</lebel><br>
+                        <select type="text" name="status" value="{{campaign.current_status}}" required>
+                            <option value="open" {%if campaign.current_status == 'open' %} selected {%endif%}>open</option>
+                            <option value="closed" {%if campaign.current_status == 'closed' %} selected {%endif%}>closed</option>
+                        </select><br>
+                        <lebel>Goals</lebel><br>
+                        <textarea name="goals" maxlength="50" required>{{campaign.goals}}</textarea><br>
+                        <lebel>Description</lebel><br>
+                        <textarea name="description"  maxlength="50" required>{{campaign.description}}</textarea><br>
+                        <button type="submit">Update</button>
+                    </form>
+                </div>
+            {%elif id == 'campaignDelete'%}
+                <div class="right-col">
+                    <form action="/sponsor_camp/delete/{{campaign.campaign_id}}" method="POST">
+                        <p style="color: red;">Do You Really Want to delete? Once deleted it can not be restored.<br>
+                            All the Adrequest associated with this campaign will be deleted.</p>
+                        <select type="text" name="choice" required>
+                            <option value="" selected disabled>Select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select><br>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+                
+            {%endif%}
+        </div>
+           
+            
+        
+        
+    </body>
+</html>
+                    
+                    
+                        
+                            
+
+
