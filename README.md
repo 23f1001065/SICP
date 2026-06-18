@@ -1,3 +1,12 @@
+---
+title: Basic Web Dev
+emoji: 🚀
+colorFrom: blue
+colorTo: red
+sdk: docker
+pinned: false
+---
+
 # Sponser and Influencer Coordination Webplatform
 
 
