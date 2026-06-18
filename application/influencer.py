@@ -3,7 +3,7 @@ from flask import render_template, request,redirect,url_for,session
 from flask import current_app as app
 from werkzeug.utils import secure_filename
 from application.models import Influencer,Campaign,Adrequest,Sponsor,db
-from application.sponsor import campaigns
+
 from application.tools import generate_random_id,uuid4,datetime
 
 

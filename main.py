@@ -11,7 +11,8 @@ app.config.from_object(ProjectDevelopmentConfig)
 db.init_app(app)
 
 
-
+app.app_context().push()
+    
 
 @app.route("/", methods=["GET"])
 def home():
@@ -22,7 +23,7 @@ from application.sponsor import *
 from application.admin import*
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=8000)
+    app.run(host='0.0.0.0',port=8000,debug=False)
     
 
 
