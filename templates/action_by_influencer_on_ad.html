@@ -18,11 +18,11 @@
         </div>
         <div class="header-right-col">
             <section class="campaign-block">
-                <a href="{{url_for('influencer_dashboard')}}" class="link-button">Home</a>
-                <a href="{{url_for('influencer_profile')}}" class="link-button">Profile</a>
-                <a href="{{url_for('influencer_search')}}" class="link-button">Search</a>
-                <a href="{{url_for('influencer_stat')}}" class="link-button">Statistics</a>
-                <a href="{{url_for('influencer_logout')}}" class="link-button">logout</a>
+                <a href="{{url_for('influencer_app.influencer_dashboard')}}" class="link-button">Home</a>
+                <a href="{{url_for('influencer_app.influencer_profile')}}" class="link-button">Profile</a>
+                <a href="{{url_for('influencer_app.influencer_search')}}" class="link-button">Search</a>
+                <a href="{{url_for('influencer_app.influencer_stat')}}" class="link-button">Statistics</a>
+                <a href="{{url_for('influencer_app.influencer_logout')}}" class="link-button">logout</a>
             </section>
         </div>
     </div>
@@ -34,7 +34,7 @@
             <p>
                 Request Id : {{adrequest.adId}}
             </p>
-            <a href="{{url_for('influencer_dashboard')}}" class="link-button">Back to dashboard</a>
+            <a href="{{url_for('influencer_app.influencer_dashboard')}}" class="link-button">Back to dashboard</a>
         </div>
         <div class="right-col">
             <h3 class="link-button">Details of adrequest</h3>
@@ -96,9 +96,9 @@
             {%endif%}
             {%if adrequest.status == 'pending'%}
             <div class="inner-block">
-                <a class="link-button" style="background-color: rgb(43, 107, 31);" href="{{url_for('take_action',flag='ra',ad_id=adrequest.adId)}}" >Accept</a>
-                <a class="link-button" style="background-color: rgb(138, 79, 79);" href="{{url_for('take_action',flag='ng',ad_id=adrequest.adId)}}">NegoTiate</a>
-                <a class="link-button" style="background-color: rgb(204, 47, 47);" href="{{url_for('take_action',flag='rr',ad_id=adrequest.adId)}}">Reject</a>
+                <a class="link-button" style="background-color: rgb(43, 107, 31);" href="{{url_for('influencer_app.take_action',flag='ra',ad_id=adrequest.adId)}}" >Accept</a>
+                <a class="link-button" style="background-color: rgb(138, 79, 79);" href="{{url_for('influencer_app.take_action',flag='ng',ad_id=adrequest.adId)}}">NegoTiate</a>
+                <a class="link-button" style="background-color: rgb(204, 47, 47);" href="{{url_for('influencer_app.take_action',flag='rr',ad_id=adrequest.adId)}}">Reject</a>
             </div>
             {%else%}
             <div class="inner-block">
@@ -117,7 +117,7 @@
             <p>
                 Request Id : {{adrequest.adId}}
             </p>
-            <a href="{{url_for('influencer_dashboard')}}" class="link-button">Back to dashboard</a>
+            <a href="{{url_for('influencer_app.influencer_dashboard')}}" class="link-button">Back to dashboard</a>
         </div>
         <div class="right-col">
             <form action="/influencer_dashboard/adrequest/ra/{{adrequest.adId}}" method="POST">
@@ -138,7 +138,7 @@
             <p>
                 Request Id : {{adrequest.adId}}
             </p>
-            <a href="{{url_for('influencer_dashboard')}}" class="link-button">Back to dashboard</a>
+            <a href="{{url_for('influencer_app.influencer_dashboard')}}" class="link-button">Back to dashboard</a>
         </div>
         <div class="right-col">
             <form action="/influencer_dashboard/adrequest/ng/{{adrequest.adId}}" method="POST">
@@ -158,7 +158,7 @@
             <p>
                 Request Id : {{adrequest.adId}}
             </p>
-            <a href="{{url_for('influencer_dashboard')}}" class="link-button">Back to dashboard</a>
+            <a href="{{url_for('influencer_app.influencer_dashboard')}}" class="link-button">Back to dashboard</a>
         </div>
         <div class="right-col">
             <form action="/influencer_dashboard/adrequest/rr/{{adrequest.adId}}" method="POST">

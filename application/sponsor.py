@@ -1,14 +1,13 @@
 import os
-from flask import render_template, request,redirect,url_for,session
-from flask import current_app as app
-#from numpy import delete
+from flask import render_template, request,redirect,url_for,session,current_app
+from application.bluprint import sponsor_app
 from werkzeug.utils import secure_filename
 from application import influencer
 from application.models import Sponsor,Campaign,Influencer,Adrequest,db
 from application.tools import generate_random_id,uuid4,datetime
 
 #ALL About SPONSORS----------------------------------------------------------------------------------
-@app.route("/sponsor/register", methods=["GET","POST"])
+@sponsor_app.route("/sponsor/register", methods=["GET","POST"])
 def sponsor_register():
     if request.method == "POST":
         name = request.form['name']
@@ -45,7 +44,7 @@ def sponsor_register():
         
 
 
-@app.route("/sponsor/login", methods=["GET","POST"])
+@sponsor_app.route("/sponsor/login", methods=["GET","POST"])
 def sponsor_login():
     if request.method =="POST":
         email = request.form['sponsorEmail']
@@ -62,7 +61,7 @@ def sponsor_login():
                 session['sponsor_id'] = sponsor.sponsor_id
                 session['sponsor_name'] = sponsor.name
                 session['image'] = sponsor.profile_image
-                return redirect(url_for('sponsor_dashboard'))
+                return redirect(url_for('sponsor_app.sponsor_dashboard'))
             else:
                 return render_template('message.html',id='SPINVALID'),404
     return render_template("sponsor_login.html")
@@ -71,22 +70,23 @@ def sponsor_login():
 
 
 
-@app.route("/sponsor_dashboard/profile_pic/upload", methods=["GET","POST"])
+@sponsor_app.route("/sponsor_dashboard/profile_pic/upload", methods=["GET","POST"])
 def sponsor_update_profile():  
     if request.method == 'POST':
         if "sponsor_name" not in session.keys() and "sponsor_id" not  in session.keys():
-            return redirect(url_for('sponsor_login'))
+            return redirect(url_for('sponsor_app.sponsor_login'))
         sponsor_id = session['sponsor_id']
         image = request.files['profile_pic']
+        filename = ""
         try:
             sponsor = Sponsor.query.filter_by(sponsor_id=sponsor_id).first_or_404()
             if sponsor and image and image.filename:
                 filename = str(uuid4()) + "_" + secure_filename(image.filename)
-                filepath = os.path.join(app.config['UPLOAD_FOLDER'],filename)
+                filepath = os.path.join(current_app.config['UPLOAD_FOLDER'],filename)
                 image.save(filepath)
 
                 if sponsor.profile_image != 'default.png':
-                    old_filepath = os.path.join(app.config['UPLOAD_FOLDER'],sponsor.profile_image)
+                    old_filepath = os.path.join(current_app.config['UPLOAD_FOLDER'],sponsor.profile_image)
                     if os.path.exists(old_filepath):
                         os.remove(old_filepath)
                 sponsor.profile_image = filename
@@ -95,15 +95,15 @@ def sponsor_update_profile():
         else:
             db.session.commit()
             session['image'] = filename
-    return redirect(url_for('sponsor_profile'))
+    return redirect(url_for('sponsor_app.sponsor_profile'))
             
 
 
 
-@app.route("/sponsor_dashboard/profile", methods=["GET","POST"])
+@sponsor_app.route("/sponsor_dashboard/profile", methods=["GET","POST"])
 def sponsor_profile():
     if "sponsor_name" not in session.keys() and "sponsor_id" not  in session.keys():
-        return redirect(url_for('sponsor_login'))
+        return redirect(url_for('sponsor_app.sponsor_login'))
     name = session["sponsor_name"]
     sponsor_id = session['sponsor_id']
     image = session['image']
@@ -138,10 +138,10 @@ def sponsor_profile():
 
 
 
-@app.route("/sponsor_dashboard", methods=["GET","POST"])
+@sponsor_app.route("/sponsor_dashboard", methods=["GET","POST"])
 def sponsor_dashboard():
     if "sponsor_name" not in session.keys() and "sponsor_id" not in session.keys():
-        return redirect(url_for('sponsor_login'))
+        return redirect(url_for('sponsor_app.sponsor_login'))
     name = session['sponsor_name']
     sponsor_id = session['sponsor_id']
     image = session['image']
@@ -168,10 +168,10 @@ def sponsor_dashboard():
 
 
 
-@app.route('/sponsor_dashboard/<string:flag>/<string:ad_id>',methods=["GET","POST"])
+@sponsor_app.route('/sponsor_dashboard/<string:flag>/<string:ad_id>',methods=["GET","POST"])
 def about_adrequest(flag,ad_id):
     if "sponsor_name" not in session.keys() and "sponsor_id" not in session.keys():
-        return redirect(url_for('sponsor_login'))
+        return redirect(url_for('sponsor_app.sponsor_login'))
     name = session['sponsor_name']
     sponsor_id = session['sponsor_id']
     image = session['image']
@@ -216,16 +216,16 @@ def about_adrequest(flag,ad_id):
                     return render_template('message.html', id = 'DBERROR', error = e),503
                 else:
                     db.session.commit()
-                    return redirect(url_for('sponsor_dashboard'))
+                    return redirect(url_for('sponsor_app.sponsor_dashboard'))
             return render_template('Adrequest_view.html',id='view',name=name,image=image,adrequest=adrequest)
         return render_template('Adrequest_view.html',id='delete',name=name,image=image,adrequest=adrequest)
 
 
 
-@app.route('/sponsor_campaigns/create',methods=["GET","POST"])  
+@sponsor_app.route('/sponsor_campaigns/create',methods=["GET","POST"])  
 def  create_campaigns():
     if 'sponsor_id' not in session.keys() and "sponsor_name" not in session.keys():
-        return redirect(url_for('sponsor_login')) 
+        return redirect(url_for('sponsor_app.sponsor_login')) 
     sponsor_id = session['sponsor_id']
     name = session['sponsor_name']
     image = session['image'] 
@@ -250,17 +250,17 @@ def  create_campaigns():
             return render_template('message.html', id = 'DBERROR', error = e),503
         else:
             db.session.commit()
-            return redirect(url_for('campaigns'))
+            return redirect(url_for('sponsor_app.campaigns'))
     return render_template('sponsor_dashboard.html', id='create' ,name=name,image=image)
     
 
 
 
 
-@app.route('/sponsor_campaigns',methods=["GET","POST"])
+@sponsor_app.route('/sponsor_campaigns',methods=["GET","POST"])
 def campaigns():
     if 'sponsor_id' not in session.keys() and "sponsor_name" not in session.keys():
-        return redirect(url_for('sponsor_login'))
+        return redirect(url_for('sponsor_app.sponsor_login'))
     sponsor_id = session['sponsor_id']
     name = session['sponsor_name']
     image = session['image']
@@ -274,10 +274,10 @@ def campaigns():
 
 
 
-@app.route('/sponsor_camp/<string:flag>/<string:camp_id>',methods=["GET","POST"])
+@sponsor_app.route('/sponsor_camp/<string:flag>/<string:camp_id>',methods=["GET","POST"])
 def about_camp(flag,camp_id):
     if 'sponsor_id' not in session.keys() and "sponsor_name" not in session.keys():
-        return redirect(url_for('sponsor_login'))
+        return redirect(url_for('sponsor_app.sponsor_login'))
     sponsor_id = session['sponsor_id']
     name = session['sponsor_name']
     image = session['image']
@@ -316,7 +316,7 @@ def about_camp(flag,camp_id):
                     return render_template('message.html', id = 'DBERROR', error = e),503
                 else:
                     db.session.commit()
-                    return redirect(url_for('campaigns'))
+                    return redirect(url_for('sponsor_app.campaigns'))
             return render_template('about_campaign.html',id='campaignView',name=name,image=image,campaign=campaign)
         return render_template('about_campaign.html',id='campaignDelete',name=name,image=image,campaign=campaign)
 
@@ -324,10 +324,10 @@ def about_camp(flag,camp_id):
 
 
 
-@app.route('/sponsor_dashboard/search_influencers',methods=["GET","POST"])
+@sponsor_app.route('/sponsor_dashboard/search_influencers',methods=["GET","POST"])
 def search_influencers():
     if 'sponsor_id' not in session.keys() and "sponsor_name" not in session.keys():
-        return redirect(url_for('sponsor_login'))
+        return redirect(url_for('sponsor_app.sponsor_login'))
     sponsor_id = session['sponsor_id']
     name = session['sponsor_name']
     image = session['image'] 
@@ -345,10 +345,10 @@ def search_influencers():
     else:
         return render_template('sponsor_dashboard.html', id='search', name=name,image=image,influencers=influencers,empty_q=False)
 
-@app.route('/sponsor_dashboard/search_influencers/v/<string:influencer_id>',methods=["GET","POST"])
+@sponsor_app.route('/sponsor_dashboard/search_influencers/v/<string:influencer_id>',methods=["GET","POST"])
 def find_influencers(influencer_id):
     if 'sponsor_id' not in session.keys() and "sponsor_name" not in session.keys():
-        return redirect(url_for('sponsor_login'))
+        return redirect(url_for('sponsor_app.sponsor_login'))
     sponsor_id = session['sponsor_id']
     name = session['sponsor_name']
     image = session['image'] 
@@ -359,10 +359,10 @@ def find_influencers(influencer_id):
     else:
         return render_template('find_influencer.html',id='view',name=name,image=image,influencer=influencer)
 
-@app.route('/sponsor_dashboard/adrequest/<string:influencer_id>',methods=["GET","POST"])
+@sponsor_app.route('/sponsor_dashboard/adrequest/<string:influencer_id>',methods=["GET","POST"])
 def make_request(influencer_id):
     if 'sponsor_id' not in session.keys() and "sponsor_name" not in session.keys():
-        return redirect(url_for('sponsor_login'))
+        return redirect(url_for('sponsor_app.sponsor_login'))
     sponsor_id = session['sponsor_id']
     name = session['sponsor_name']
     image = session['image'] 
@@ -400,10 +400,10 @@ def make_request(influencer_id):
     
 
 
-@app.route("/sponsor/logout", methods=["GET","POST"])
+@sponsor_app.route("/sponsor/logout", methods=["GET","POST"])
 def sponsor_logout():
     if 'sponsor_id' not in session.keys() and "sponsor_name" not in session.keys():
-        return redirect(url_for('sponsor_login'))
+        return redirect(url_for('sponsor_app.sponsor_login'))
     sponsor_id = session['sponsor_id']
     
     
@@ -417,5 +417,5 @@ def sponsor_logout():
         return render_template('message.html', id = 'DBERROR', error = e),503
     else:
         db.session.commit()
-    return redirect(url_for('sponsor_login'))
+    return redirect(url_for('sponsor_app.sponsor_login'))
         

@@ -1,14 +1,15 @@
 import os
-from flask import render_template, request,redirect,url_for,session
-from flask import current_app as app
+from flask import render_template, request,redirect,url_for,session,current_app
+from application.bluprint import influencer_app
 from werkzeug.utils import secure_filename
 from application.models import Influencer,Campaign,Adrequest,Sponsor,db
-
 from application.tools import generate_random_id,uuid4,datetime
 
 
 
-@app.route("/influencer/login", methods=["GET","POST"])
+
+
+@influencer_app.route("/influencer/login", methods=["GET","POST"])
 def influencer_login():
     if request.method =="POST":
         email = request.form['influencerEmail']
@@ -26,7 +27,7 @@ def influencer_login():
                 session['influencer_id'] = influencer.influencer_id
                 session['influencer_name'] = influencer.name
                 session['influencer_image'] = influencer.profile_image
-                return redirect(url_for('influencer_dashboard'))
+                return redirect(url_for('influencer_app.influencer_dashboard'))
             else:
                 return render_template('message.html',id='ININVALID'),404
     return render_template("influencer_login.html")
@@ -34,7 +35,7 @@ def influencer_login():
 
 
 
-@app.route("/influencer/register", methods=["GET","POST"])
+@influencer_app.route("/influencer/register", methods=["GET","POST"])
 def influencer_register():
     if request.method == "POST":
         name = request.form['name']
@@ -76,10 +77,10 @@ def influencer_register():
         
     return render_template("influencer_register.html")
 
-@app.route("/influencer_dashboard", methods=["GET","POST"])
+@influencer_app.route("/influencer_dashboard", methods=["GET","POST"])
 def influencer_dashboard():
     if "influencer_name" not in session.keys() and "influencer_id" not  in session.keys():
-        return redirect(url_for('influencer_login'))
+        return redirect(url_for('influencer_app.influencer_login'))
     name = session["influencer_name"]
     influencer_id = session['influencer_id']
     image = session['influencer_image']
@@ -101,10 +102,10 @@ def influencer_dashboard():
 
 
 
-@app.route("/influencer_dashboard/profile_pic/upload", methods=["GET","POST"])
+@influencer_app.route("/influencer_dashboard/profile_pic/upload", methods=["GET","POST"])
 def influencer_update_profile():   
     if "influencer_name" not in session.keys() and "influencer_id" not  in session.keys():
-            return redirect(url_for('influencer_login'))
+            return redirect(url_for('influencer_app.influencer_login'))
     filename = ""
     influencer_id = session['influencer_id']
     if request.method == 'POST':
@@ -113,11 +114,11 @@ def influencer_update_profile():
             influencer = Influencer.query.filter_by(influencer_id=influencer_id).first()
             if influencer and image and image.filename:
                 filename = str(uuid4()) + "_" + secure_filename(image.filename)
-                filepath = os.path.join(app.config['UPLOAD_FOLDER'],filename)
+                filepath = os.path.join(current_app.config['UPLOAD_FOLDER'],filename)
                 image.save(filepath)
 
                 if influencer.profile_image != 'default.png':
-                    old_filepath = os.path.join(app.config['UPLOAD_FOLDER'],influencer.profile_image)
+                    old_filepath = os.path.join(current_app.config['UPLOAD_FOLDER'],influencer.profile_image)
                     if os.path.exists(old_filepath):
                         os.remove(old_filepath)
                 influencer.profile_image = filename
@@ -126,7 +127,7 @@ def influencer_update_profile():
         else:
             db.session.commit()
             session['influencer_image'] = filename
-    return redirect(url_for('influencer_profile'))
+    return redirect(url_for('influencer_app.influencer_profile'))
         
         
             
@@ -134,10 +135,10 @@ def influencer_update_profile():
 
     
 
-@app.route("/influencer_dashboard/profile", methods=["GET","POST"])
+@influencer_app.route("/influencer_dashboard/profile", methods=["GET","POST"])
 def influencer_profile():
     if "influencer_name" not in session.keys() and "influencer_id" not  in session.keys():
-        return redirect(url_for('influencer_login'))
+        return redirect(url_for('influencer_app.influencer_login'))
     name = session["influencer_name"]
     influencer_id = session['influencer_id']
     image = session['influencer_image']
@@ -176,10 +177,10 @@ def influencer_profile():
         
 
 
-@app.route("/influencer_dashboard/search_campaign", methods=["GET","POST"])
+@influencer_app.route("/influencer_dashboard/search_campaign", methods=["GET","POST"])
 def influencer_search():
     if "influencer_name" not in session.keys() and "influencer_id" not  in session.keys():
-        return redirect(url_for('influencer_login'))
+        return redirect(url_for('influencer_app.influencer_login'))
     name = session["influencer_name"]
     influencer_id = session['influencer_id']
     image = session['influencer_image']
@@ -201,10 +202,10 @@ def influencer_search():
 
 
 
-@app.route("/influencer_dashboard/view_campaign/<string:camp_id>", methods=["GET","POST"])
+@influencer_app.route("/influencer_dashboard/view_campaign/<string:camp_id>", methods=["GET","POST"])
 def view_campaign(camp_id):
     if "influencer_name" not in session.keys() and "influencer_id" not  in session.keys():
-        return redirect(url_for('influencer_login'))
+        return redirect(url_for('influencer_app.influencer_login'))
     name = session["influencer_name"]
     influencer_id = session['influencer_id']
     image = session['influencer_image']
@@ -216,10 +217,10 @@ def view_campaign(camp_id):
     return render_template('influencer_dashboard.html',id='view',name=name,image=image,campaign=campaign)
 
 
-@app.route('/influencer_dashboard/adrequest/<string:flag>/<string:ad_id>',methods=["GET","POST"])
+@influencer_app.route('/influencer_dashboard/adrequest/<string:flag>/<string:ad_id>',methods=["GET","POST"])
 def take_action(flag,ad_id):
     if "influencer_name" not in session.keys() and "influencer_id" not  in session.keys():
-        return redirect(url_for('influencer_login'))
+        return redirect(url_for('influencer_app.influencer_login'))
     name = session["influencer_name"]
     influencer_id = session['influencer_id']
     image = session['influencer_image']
@@ -248,7 +249,7 @@ def take_action(flag,ad_id):
                     return render_template('message.html', id = 'DBERROR', error = e),503
                 else:
                     db.session.commit()
-                    return redirect(url_for('influencer_dashboard'))
+                    return redirect(url_for('influencer_app.influencer_dashboard'))
             return render_template('action_by_influencer_on_ad.html',
                                    id='rview',
                                    name=name,
@@ -271,7 +272,7 @@ def take_action(flag,ad_id):
                     return render_template('message.html', id = 'DBERROR', error = e),503
                 else:
                     db.session.commit()
-                    return redirect(url_for('influencer_dashboard'))
+                    return redirect(url_for('influencer_app.influencer_dashboard'))
             return render_template('action_by_influencer_on_ad.html',
                                    id='rview',
                                    name=name,
@@ -312,10 +313,10 @@ def take_action(flag,ad_id):
         return render_template('message.html', id = 'DBERROR'),503
                
 
-@app.route('/influencer_dashboard/adrequest/<string:campaign_id>',methods=["GET","POST"])
+@influencer_app.route('/influencer_dashboard/adrequest/<string:campaign_id>',methods=["GET","POST"])
 def send_request(campaign_id):
     if "influencer_name" not in session.keys() and "influencer_id" not  in session.keys():
-        return redirect(url_for('influencer_login'))
+        return redirect(url_for('influencer_app.influencer_login'))
     name = session["influencer_name"]
     influencer_id = session['influencer_id']
     image = session['influencer_image']
@@ -346,14 +347,14 @@ def send_request(campaign_id):
             return render_template('influencer_dashboard.html',id='success',name=name,image=image,campaign=campaign)
     return render_template('influencer_dashboard.html',id='send',name=name,image=image,campaign=campaign,influencer_id=influencer_id)
 
-@app.route("/influencer_dashboard/stat", methods=["GET","POST"])
+@influencer_app.route("/influencer_dashboard/stat", methods=["GET","POST"])
 def influencer_stat():
     return 'statistics'
     
-@app.route("/influencer/logout", methods=["GET","POST"])
+@influencer_app.route("/influencer/logout", methods=["GET","POST"])
 def influencer_logout():
     if 'influencer_id' not in session.keys() and "influencer_name" not in session.keys():
-         return redirect(url_for('influencer_login'))
+         return redirect(url_for('influencer_app.influencer_login'))
     
     influencer_id = session['influencer_id']
     
@@ -366,7 +367,7 @@ def influencer_logout():
     else:
         influencer.status = 0 #type:ignore
         db.session.commit()
-    return redirect(url_for('influencer_login'))
+    return redirect(url_for('influencer_app.influencer_login'))
     
 
 

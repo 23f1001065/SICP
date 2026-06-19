@@ -13,10 +13,10 @@
             </div>
             <div class="header-right-col">
                 <div class="campaign-block">
-                    <a href="" class="link-button">Profile</a>
+                    <a href="{{url_for('admin_app.admin_profile')}}" class="link-button">Profile</a>
                     <a href="" class="link-button">Search</a>
                     <a href="" class="link-button">Statistics</a>
-                    <a href="{{url_for('admin_logout')}}" class="link-button">logout</a>
+                    <a href="{{url_for('admin_app.admin_logout')}}" class="link-button">logout</a>
                 </div>
             </div>
         </div>
@@ -33,10 +33,10 @@
                             <ol>
                                 {%for s in sponsors%}
                                 <li>{%if s.status == 1%}
-                                    <a href="{{url_for('view_users',flag='vs',id=s.sponsor_id)}}" class="a">{{s.sponsor_id}}</a>
+                                    <a href="{{url_for('admin_app.view_users',flag='vs',id=s.sponsor_id)}}" class="a">{{s.sponsor_id}}</a>
                                     <span style="color: greenyellow;">(Active)</span>
                                     {%else%}
-                                    <a href="{{url_for('view_users',flag='vs',id=s.sponsor_id)}}" class="a">{{s.sponsor_id}}</a>
+                                    <a href="{{url_for('admin_app.view_users',flag='vs',id=s.sponsor_id)}}" class="a">{{s.sponsor_id}}</a>
                                     <span style="color:rgb(72, 140, 230) ;">(Inactive)</span>
                                     {%endif%}
                                 </li>
@@ -57,9 +57,9 @@
                             <ol>
                                 {%for i in influencers%}
                                 <li>{%if i.status == 1%}
-                                    <a href="{{url_for('view_users',flag='vi',id=i.influencer_id)}}" class="a">{{i.influencer_id}}</a><span style="color: greenyellow;">(Active)</span>
+                                    <a href="{{url_for('admin_app.view_users',flag='vi',id=i.influencer_id)}}" class="a">{{i.influencer_id}}</a><span style="color: greenyellow;">(Active)</span>
                                     {%else%}
-                                    <a href="{{url_for('view_users',flag='vi',id=i.influencer_id)}}" class="a">{{i.influencer_id}}</a><span style="color:rgb(72, 140, 230) ;">(Inactive)</span>
+                                    <a href="{{url_for('admin_app.view_users',flag='vi',id=i.influencer_id)}}" class="a">{{i.influencer_id}}</a><span style="color:rgb(72, 140, 230) ;">(Inactive)</span>
                                     {%endif%}
                                 </li>
                                 {%endfor%}
@@ -83,9 +83,9 @@
                             <ol>
                                 {%for c in campaigns%}
                                 <li>{%if c.current_status == 'open'%}
-                                    <a href="{{url_for('view_users',flag='vc',id=c.campaign_id)}}" class="a">{{c.campaign_id}}</a><span style="color: greenyellow;">(OPEN)</span>
+                                    <a href="{{url_for('admin_app.view_users',flag='vc',id=c.campaign_id)}}" class="a">{{c.campaign_id}}</a><span style="color: greenyellow;">(OPEN)</span>
                                     {%else%}
-                                    <a href="{{url_for('view_users',flag='vc',id=c.campaign_id)}}" class="a">{{c.campaign_id}}</a><span style="color:rgb(219, 25, 25) ;">(CLOSED)</span>
+                                    <a href="{{url_for('admin_app.view_users',flag='vc',id=c.campaign_id)}}" class="a">{{c.campaign_id}}</a><span style="color:rgb(219, 25, 25) ;">(CLOSED)</span>
                                     {%endif%}
                                 </li>
                                 {%endfor%}

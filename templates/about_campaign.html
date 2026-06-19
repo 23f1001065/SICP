@@ -14,12 +14,12 @@
             </div>
             <div class="header-right-col">
                 <section class="campaign-block">
-                    <a href="{{url_for('sponsor_dashboard')}}" class="link-button">Home</a>
-                    <a href="{{url_for('sponsor_profile')}}" class="link-button">Profile</a>
-                    <a href="{{url_for('campaigns')}}" class="link-button">Campaigns</a>
-                    <a href="{{url_for('search_influencers')}}" class="link-button">Search</a>
+                    <a href="{{url_for('sponsor_app.sponsor_dashboard')}}" class="link-button">Home</a>
+                    <a href="{{url_for('sponsor_app.sponsor_profile')}}" class="link-button">Profile</a>
+                    <a href="{{url_for('sponsor_app.campaigns')}}" class="link-button">Campaigns</a>
+                    <a href="{{url_for('sponsor_app.search_influencers')}}" class="link-button">Search</a>
                     <a href="" class="link-button">Statistics</a>
-                    <a href="{{url_for('sponsor_logout')}}" class="link-button">logout</a>
+                    <a href="{{url_for('sponsor_app.sponsor_logout')}}" class="link-button">logout</a>
                 </section>
 
             </div>
@@ -30,9 +30,9 @@
                 <div class="campaign-block">
                     <h3>Campaing ID : {{campaign.campaign_id}}</h3>
                     <div class="inner-block">
-                        <a class="link-button" href="{{url_for('about_camp',flag='v',camp_id=campaign.campaign_id)}}"> View</a>
-                        <a class="link-button" href="{{url_for('about_camp',flag='edit',camp_id=campaign.campaign_id)}}"> Edit</a>
-                        <a class="link-button" style="background-color: rgb(204, 47, 47);" href="{{url_for('about_camp',flag='delete',camp_id=campaign.campaign_id)}}"> Delete</a>
+                        <a class="link-button" href="{{url_for('sponsor_app.about_camp',flag='v',camp_id=campaign.campaign_id)}}"> View</a>
+                        <a class="link-button" href="{{url_for('sponsor_app.about_camp',flag='edit',camp_id=campaign.campaign_id)}}"> Edit</a>
+                        <a class="link-button" style="background-color: rgb(204, 47, 47);" href="{{url_for('sponsor_app.about_camp',flag='delete',camp_id=campaign.campaign_id)}}"> Delete</a>
                     </div>
                 </div>
             </div>

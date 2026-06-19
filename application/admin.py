@@ -1,6 +1,6 @@
 import os
-from flask import render_template, request,redirect,url_for,session,abort
-from flask import current_app as app
+from flask import render_template, request,redirect,url_for,session,abort,current_app
+from application.bluprint import admin_app
 from werkzeug.utils import secure_filename
 from application.models import Admin,Influencer,Adrequest,Campaign,Sponsor,db
 from application.tools import generate_random_id,uuid4,datetime
@@ -9,7 +9,7 @@ from application.tools import generate_random_id,uuid4,datetime
 
 #ALL ABOUT ADMIN ------------------------------------------------------------------------------------------
 
-@app.route("/admin_login", methods=["GET","POST"])
+@admin_app.route("/admin_login", methods=["GET","POST"])
 def admin_login():
     if request.method =="POST":
         adminID = request.form['userId']
@@ -24,17 +24,17 @@ def admin_login():
                 session['admin_name'] = admin.name
                 admin.last_login = datetime.now().strftime('%Y-%m-%d %H:%M')
                 db.session.commit()
-                return redirect(url_for('admin_dashboard'))
+                return redirect(url_for('admin_app.admin_dashboard'))
             else:
                 return 'Invalid Credentials. Admin with that ID or password not Found', 404
     return render_template("admin_login.html")
 
         
     
-@app.route("/admin_dashboard", methods=["GET","POST"])
+@admin_app.route("/admin_dashboard", methods=["GET","POST"])
 def admin_dashboard():
     if "admin_name" not in session.keys() and "admin_id" not in session.keys():
-        return redirect(url_for('admin_login'))
+        return redirect(url_for('admin_app.admin_login'))
     name = session.get("admin_name")
     admin_id = session.get("admin_id")
     try:
@@ -51,10 +51,10 @@ def admin_dashboard():
                            campaigns = campaigns,
                            adrequests = adrequests)
 
-@app.route("/admin_dashboard/view_users/<string:flag>/<string:id>",methods=['GET','POST'])
+@admin_app.route("/admin_dashboard/view_users/<string:flag>/<string:id>",methods=['GET','POST'])
 def view_users(flag,id):
     if "admin_name" not in session.keys() and "admin_id" not in session.keys():
-        return redirect(url_for('admin_login'))
+        return redirect(url_for('admin_app.admin_login'))
     name = session.get("admin_name")
     admin_id = session.get("admin_id") 
     if flag == 'vs':
@@ -100,10 +100,10 @@ def view_users(flag,id):
         abort(404)
 
 
-@app.route("/admin_logout", methods=["GET","POST"])
+@admin_app.route("/admin_logout", methods=["GET","POST"])
 def admin_logout():
     if "admin_name" not in session.keys() and "admin_id" not in session.keys():
-        return redirect(url_for('admin_login'))
+        return redirect(url_for('admin_app.admin_login'))
     session.pop('admin_id')
     session.pop('admin_name')
-    return redirect(url_for('admin_login'))
+    return redirect(url_for('admin_app.admin_login'))

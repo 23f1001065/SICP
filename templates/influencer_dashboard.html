@@ -15,11 +15,11 @@
             </div>
             <div class="header-right-col">
                 <section class="campaign-block">
-                    <a href="{{url_for('influencer_dashboard')}}" class="link-button">Home</a>
-                    <a href="{{url_for('influencer_profile')}}" class="link-button">Profile</a>
-                    <a href="{{url_for('influencer_search')}}" class="link-button">Search</a>
-                    <a href="{{url_for('influencer_stat')}}" class="link-button">Statistics</a>
-                    <a href="{{url_for('influencer_logout')}}" class="link-button">logout</a>
+                    <a href="{{url_for('influencer_app.influencer_dashboard')}}" class="link-button">Home</a>
+                    <a href="{{url_for('influencer_app.influencer_profile')}}" class="link-button">Profile</a>
+                    <a href="{{url_for('influencer_app.influencer_search')}}" class="link-button">Search</a>
+                    <a href="{{url_for('influencer_app.influencer_stat')}}" class="link-button">Statistics</a>
+                    <a href="{{url_for('influencer_app.influencer_logout')}}" class="link-button">logout</a>
                 </section>
             </div>
         </div>
@@ -100,7 +100,7 @@
                 <li>
                     <h3>Campaing ID : {{campaign.campaign_id}}</h3>
                     <div class="inner-block">
-                        <a class="link-button" href="{{url_for('view_campaign',camp_id=campaign.campaign_id)}}">View</a>
+                        <a class="link-button" href="{{url_for('influencer_app.view_campaign',camp_id=campaign.campaign_id)}}">View</a>
                     </div>
                 </li>
                 <hr>
@@ -132,7 +132,7 @@
                     Create Date : {{campaign.created_date}}<br>
                 </p>
                 <div class="inner-block">
-                    <a href="{{url_for('send_request',campaign_id=campaign.campaign_id)}}" class="link-button">Ad Request</a>
+                    <a href="{{url_for('influencer_app.send_request',campaign_id=campaign.campaign_id)}}" class="link-button">Ad Request</a>
                 </div>
             </div>
         </div>
@@ -166,7 +166,7 @@
             </div>
             <div class="right-col">
                 <h3 style="color: green;">AD request sent to campaign {{campaign.name}} successfully.</h3>
-                <a href="{{url_for('influencer_dashboard')}}" class="link-button">Back to dashboard</a>
+                <a href="{{url_for('influencer_app.influencer_dashboard')}}" class="link-button">Back to dashboard</a>
             </div>
         </div>
         
@@ -222,7 +222,7 @@
                             Status : <span style="color: red;">{{ad.status}}</span>
                             {%endif%}
                             <div class="inner-block">
-                                <a class="link-button" href="{{url_for('take_action',flag='rv',ad_id=ad.adId)}}"> View</a>
+                                <a class="link-button" href="{{url_for('influencer_app.take_action',flag='rv',ad_id=ad.adId)}}"> View</a>
                             </div>
                                 
                         </li>
