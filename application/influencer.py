@@ -105,6 +105,7 @@ def influencer_dashboard():
 def influencer_update_profile():   
     if "influencer_name" not in session.keys() and "influencer_id" not  in session.keys():
             return redirect(url_for('influencer_login'))
+    filename = ""
     influencer_id = session['influencer_id']
     if request.method == 'POST':
         image = request.files['profile_pic']
@@ -307,7 +308,9 @@ def take_action(flag,ad_id):
                                name=name,
                                image=image,
                                adrequest=adrequest)    
-            
+    else:
+        return render_template('message.html', id = 'DBERROR'),503
+               
 
 @app.route('/influencer_dashboard/adrequest/<string:campaign_id>',methods=["GET","POST"])
 def send_request(campaign_id):
